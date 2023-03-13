@@ -1,0 +1,98 @@
+import TestQuestions
+import random
+
+QUESTION_LIST = TestQuestions.QUESTIONS
+
+
+class Participant:
+    def __init__(self):
+        self.introvert_extravert_score = 0
+        self.neuroticism_score = 0
+        self.lie_score = 0
+        self.current_answers = []
+
+
+participant = Participant()
+participant1 = Participant()
+participant2 = Participant()
+
+
+class Main:
+    # Подсчёт очков за личностный тест
+    def check_answers(self, participant_answers,
+                      extravert_introvert_yes=TestQuestions.EXTROVERSION_INTROVERSION_YES,
+                      extravert_introvert_no=TestQuestions.EXTROVERSION_INTROVERSION_NO,
+                      neuroticism=TestQuestions.NEUROTICISM_YES,
+                      lie_scale_yes=TestQuestions.LIE_SCALE_YES,
+                      lie_scale_no=TestQuestions.LIE_SCALE_NO
+                      ):
+
+        for question_number, answer in enumerate(participant_answers, start=1):
+            if question_number in extravert_introvert_yes and answer == True:
+                participant.introvert_extravert_score += 1
+
+            elif question_number in extravert_introvert_no and answer == False:
+                participant.introvert_extravert_score += 1
+
+            elif question_number in neuroticism and answer == True:
+                participant.neuroticism_score += 1
+
+            elif question_number in lie_scale_yes and answer == True:
+                participant.lie_score += 1
+
+            elif question_number in lie_scale_no and answer == False:
+                participant.lie_score += 1
+
+    def check_temperament(self, extravert_scr, neuroticism_scr, lie_scr):
+        def check_extraversion(extravert_score=extravert_scr):
+            if extravert_score >= 19:
+                return 'Яркий экстраверт'
+
+            elif extravert_score >= 15:
+                return 'Экстраверт'
+
+            elif 9 < extravert_score < 15:
+                return 'Среднее значение'
+
+            elif extravert_score <= 5:
+                return 'Глубокий интроверт'
+
+            elif extravert_score <= 9:
+                return 'Интроверт'
+
+        def check_neuriticism(neuroticism_score=neuroticism_scr):
+            if neuroticism_score > 19:
+                return 'Очень высокий уровень нейротизма'
+
+            elif neuroticism_score > 14:
+                return 'Экстраверт'
+
+            elif 10 <= neuroticism_score <= 14:
+                return 'Среднее значение'
+
+            elif neuroticism_score <= 9:
+                return 'Низкий уровень нейротизма'
+
+        def check_lie(lie_score=lie_scr):
+            if lie_score >= 4:
+                return 'Неискренность в ответах'
+
+            elif lie_score < 4:
+                return 'Норма'
+
+        return [check_extraversion(), check_neuriticism(), check_lie()]
+
+    for question in QUESTION_LIST:
+        # participant_answer = bool(int(input(question))) # 1 or 0
+        participant_answer = random.choice([True, False])
+        participant.current_answers.append(participant_answer)
+
+    # print(participant.current_answers)
+
+
+main = Main()
+main.check_answers(participant.current_answers)
+
+p = participant
+print(p.introvert_extravert_score, p.neuroticism_score, p.lie_score)
+print(main.check_temperament(p.introvert_extravert_score, p.neuroticism_score, p.lie_score))
