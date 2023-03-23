@@ -1,20 +1,19 @@
 import TestQuestions
 import random
+import colleges_Info
 
 QUESTION_LIST = TestQuestions.QUESTIONS
 
 
 class Participant:
     def __init__(self):
-        self.introvert_extravert_score = 0
+        self.extraversion_score = 0
         self.neuroticism_score = 0
         self.lie_score = 0
         self.current_answers = []
 
 
 participant = Participant()
-participant1 = Participant()
-participant2 = Participant()
 
 
 class Main:
@@ -29,10 +28,10 @@ class Main:
 
         for question_number, answer in enumerate(participant_answers, start=1):
             if question_number in extravert_introvert_yes and answer == True:
-                participant.introvert_extravert_score += 1
+                participant.extraversion_score += 1
 
             elif question_number in extravert_introvert_no and answer == False:
-                participant.introvert_extravert_score += 1
+                participant.extraversion_score += 1
 
             elif question_number in neuroticism and answer == True:
                 participant.neuroticism_score += 1
@@ -43,6 +42,7 @@ class Main:
             elif question_number in lie_scale_no and answer == False:
                 participant.lie_score += 1
 
+    # Существует координатная плоскость темпераментов. Функция рассчитывает конкретный.
     def check_temperament(self, extravert_scr, neuroticism_scr, lie_scr):
         def check_extraversion(extravert_score=extravert_scr):
             if extravert_score >= 19:
@@ -60,7 +60,7 @@ class Main:
             elif extravert_score <= 9:
                 return 'Интроверт'
 
-        def check_neuriticism(neuroticism_score=neuroticism_scr):
+        def check_neuroticism(neuroticism_score=neuroticism_scr):
             if neuroticism_score > 19:
                 return 'Очень высокий уровень нейротизма'
 
@@ -80,7 +80,40 @@ class Main:
             elif lie_score < 4:
                 return 'Норма'
 
-        return [check_extraversion(), check_neuriticism(), check_lie()]
+        return [check_extraversion(), check_neuroticism(), check_lie()]
+
+    def temperament_calculate(self, extraversion_score, neuroticism_score, lie_score):
+        participant_is_lying = False
+
+        if lie_score > 4:
+            participant_is_lying = True
+
+        if 0 <= extraversion_score <= 12 and 12 <= neuroticism_score <= 24:
+            return 'меланхолик', participant_is_lying
+
+        elif 0 <= extraversion_score <= 12 and 0 <= neuroticism_score <= 12:
+            return 'флегматик', participant_is_lying
+
+        elif 12 <= extraversion_score <= 24 and 0 <= neuroticism_score <= 12:
+            return 'сангвиник', participant_is_lying
+
+        elif 12 <= extraversion_score <= 24 and 12 <= neuroticism_score <= 24:
+            return 'холерик', participant_is_lying
+
+    # Возвращает текст с теорией о темпераменте участника
+    def get_temperament_text(self, temperament, user_lying=False):
+        if user_lying:
+            return str(TestQuestions.TEMPERAMENT[temperament]) + TestQuestions.INSINCERITY_TEXT
+
+        return str(TestQuestions.TEMPERAMENT[temperament])
+
+    def select_colleges_under_temperament(self, temperament, college_list):
+        for college in college_list:
+            print('-' * 50)
+            print(college)
+            for profession in college_list[college].items():
+                if temperament in profession[-1]:
+                    print('Под ваш темперамент подходит профессия:', profession[0])
 
     for question in QUESTION_LIST:
         # participant_answer = bool(int(input(question))) # 1 or 0
@@ -90,9 +123,24 @@ class Main:
     # print(participant.current_answers)
 
 
-main = Main()
-main.check_answers(participant.current_answers)
+MainActions = Main()
+MainActions.check_answers(participant.current_answers)
 
 p = participant
-print(p.introvert_extravert_score, p.neuroticism_score, p.lie_score)
-print(main.check_temperament(p.introvert_extravert_score, p.neuroticism_score, p.lie_score))
+temperament_scores = MainActions.check_temperament(p.extraversion_score, p.neuroticism_score, p.lie_score)
+temperament_calculated = MainActions.temperament_calculate(p.extraversion_score, p.neuroticism_score, p.lie_score)
+temp_text = MainActions.get_temperament_text(*temperament_calculated)
+
+MainActions.select_colleges_under_temperament(temperament_calculated[0], colleges_Info.COLLEGES)
+
+# print(p.extraversion_score, p.neuroticism_score, p.lie_score)
+# print(temperament_scores)
+print(temperament_calculated)
+print(temp_text)
+
+#
+# COLLEGES = colleges_Info.COLLEGES
+#
+# for college in COLLEGES:
+#     for profession in COLLEGES[college].items():
+#         print(profession)
