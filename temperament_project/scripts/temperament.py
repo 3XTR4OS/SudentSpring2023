@@ -69,17 +69,3 @@ def select_colleges_under_temperament(temperament, college_list):
         for profession in college_list[college].items():
             if temperament in profession[-1]:
                 print('Под ваш темперамент подходит профессия:', profession[0])
-
-
-for question in QUESTION_LIST:
-    # participant_answer = bool(int(input(question))) # 1 or 0
-    participant_answer = random.choice([True, False])
-    participant.current_answers.append(participant_answer)
-
-# print(participant.current_answers)
-
-# COLLEGES = colleges_Info.COLLEGES
-#
-# for college in COLLEGES:
-#     for profession in COLLEGES[college].items():
-#         print(profession)
