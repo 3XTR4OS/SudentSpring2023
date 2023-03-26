@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+    <form action="/search" method="get">
+        <input type="text" name="q">
+        <input type="submit" value="Search">
+    </form>
+
+    <form action="file_input" method="post">
+        {%csrf_token%}
+        Ваше имя<input type="text" name="name"> <br>
+        Ваша фамилия<input type="text" name="surname"> <br>
+        Ваше дата рождения<input type="text" name="birth"> <br>
+        Ваш пол<br>
+        <input type="radio" name = 'gender' value = 'male'>Мужчина <br>
+        <input type="radio" name = 'gender' value = 'female'>Женщина <br>
+
+        <button type="submit">Записать в файл</button>
+    </form>
+
+</body>
+
+</html>
